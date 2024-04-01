@@ -6,12 +6,13 @@ from django.contrib import messages
 
 
 class RegisterView(View):
+    form_class = UserRegistrationForm
     def get(self, request):
-        form = UserRegistrationForm()
+        form = self.form_class()
         return render(request, 'account/register.html', {'form': form})
 
     def post(self, request):
-        form = UserRegistrationForm(request.POST)
+        form = self.form_class(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
             User.objects.create_user(cd['username'], cd['email'], cd['password'])
